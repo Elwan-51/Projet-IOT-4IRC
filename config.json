@@ -1,14 +1,14 @@
 {
   "API": {
-    "URL": "127.0.0.1",
-    "PORT": 1002,
-    "USER": "Elwan",
-    "PASSWORD": "elwan",
-    "TOKEN": "Elwan"
+    "URL": "fast-api",
+    "PORT": 80,
+    "USER": "APIUser",
+    "PASSWORD": "qduqbwflaou8947",
+    "TOKEN": "API-User"
   },
   "DATABASE": {
-    "URL": "127.0.0.1",
-    "PORT": 5433,
+    "URL": "postgresql",
+    "PORT": 5432,
     "DATABASE_TYPE": "postgresql+psycopg2",
     "DATABASE": "IOT",
     "USER": "elwan",
@@ -23,6 +23,6 @@
     "FILENAME": "values"
   },
   "DISCORD_BOT": {
-    "BOT_TOKEN": "MTE2NjM1NDExODU1NDY4NTQ2MA.GCKOcu.h2FOfyANMuPKkNqvs3_2CrS_UP6fmUjFXlkIKU"
+    "BOT_TOKEN": "MTE2NjM1NDExODU1NDY4NTQ2MA.GxvvLs.BC21G01DbQwFSKz8tbEwNV-xvWW2PQoVWr97qs"
   }
 }

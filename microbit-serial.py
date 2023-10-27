@@ -15,7 +15,7 @@ MICRO_COMMANDS = config['SERIAL']['MICRO_COMMANDS']
 APPID = config['SERIAL']['APP_ID']
 FILENAME = config['SERIAL']['FILENAME']
 LAST_VALUE = ""
-API_URL = f"{config['API']['URL']}:{config['API']['PORT']}"
+API_URL = f"127.0.0.1"
 
 headers = {
     'Content-Type': 'application/json',
