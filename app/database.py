@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import Column, Float, String, Integer, DateTime, Boolean
 from sqlalchemy.orm import Session
 import hashlib
-from dependencies import config
+from app.dependencies import config
 
 
 SQLALCHEMY_DATABASE_URL = f'{config["DATABASE"]["DATABASE_TYPE"]}://{config["DATABASE"]["USER"]}:{config["DATABASE"]["PASSWORD"]}@{config["DATABASE"]["URL"]}:{config["DATABASE"]["PORT"]}/{config["DATABASE"]["DATABASE"]}'
@@ -44,23 +44,27 @@ Base.metadata.create_all(bind=engine)
 
 
 class Value(BaseModel):
+    value: float
+
+
+class ValueInDB(BaseModel):
     id: Optional[int] = None
     type: Optional[str] = None
-    time: Optional[datetime] = datetime.now()
     value: float
+    time: Optional[datetime] = datetime.now()
 
     class Config:
         from_attributes = True
 
 
 class User(BaseModel):
-    id: Optional[int] = None
     login: str
     disable: Optional[bool] = False
 
 
 class UserInDB(User):
     password: str
+    id: Optional[int] = None
 
     class Config:
         from_attributes = True

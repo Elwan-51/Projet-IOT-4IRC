@@ -2,9 +2,19 @@ version: '3.9'
 services:
   postgresql:
     image: 'postgres:latest'
-    ports:
-      - '5433:5432'
     environment:
       POSTGRES_USER : elwan
       POSTGRES_PASSWORD: elwan
       POSTGRES_DB: IOT
+
+  fast-api:
+    build: .
+    ports:
+      - '80:80'
+    depends_on: ["postgresql"]
+
+  discord-bot:
+    build:
+      context: .
+      dockerfile: "Dockerfile-bot"
+    depends_on: ["fast-api"]

@@ -1,14 +1,14 @@
 import hashlib
-from dependencies import config
+from app.dependencies import config
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
-from database import get_user_name, Session, get_db
+from app.database import get_user_name, Session, get_db
 import requests
-from routers import lumi
-from routers import temp
-from routers import data
-from routers import user
+from app.routers import lumi
+from app.routers import temp
+from app.routers import data
+from app.routers import user
 
 app = FastAPI()
 
