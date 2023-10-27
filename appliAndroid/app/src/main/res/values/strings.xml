@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Projet IoT</string>
+    <string name="ecran">Réglage écran</string>
+    <string name="reseau">Réglage réseau</string>
+    <string name="enregistrer">Sauvegarder</string>
+    <string name="ip">Adresse IP</string>
+    <string name="port">Port</string>
+    <string name="data">data</string>
+    <string name="dataip">dataip</string>
+    <string name="dataport">dataport</string>
+    <string name="dataLoading">Chargement des données en cours...\nSi le problème persiste rendez-vous dans réglage réseau</string>
+    <string name="actualiser">Actualiser</string>
+</resources>
