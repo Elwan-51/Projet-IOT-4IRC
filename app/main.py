@@ -1,0 +1,35 @@
+import hashlib
+from dependencies import config
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from database import get_user_name, Session, get_db
+import requests
+from routers import lumi
+from routers import temp
+from routers import data
+from routers import user
+
+app = FastAPI()
+
+app.include_router(lumi.router)
+app.include_router(temp.router)
+app.include_router(data.router)
+app.include_router(user.router)
+
+
+@app.get("/")
+async def root():
+    r = requests.post(f"{config['SERIAL']['DIST_HOST']}:{config['SERIAL']['PORT']}", data={'foo': 'bar'})
+    return {"message": "Doc available at url/docs"}
+
+@app.post('/token')
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+    user_db = get_user_name(db, form_data.username)
+    print(form_data.username)
+    if not user_db:
+        raise HTTPException(status_code=400, detail="Incorect username or Password")
+    hashed_password = hashlib.sha256(form_data.password.encode()).hexdigest()
+    if not hashed_password == user_db.password:
+        raise HTTPException(status_code=400, detail="Incorect username or Password")
+    return {"access_token": user_db.login, "token_type": "bearer"}
