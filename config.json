@@ -1,6 +1,7 @@
 {
   "API": {
     "URL": "fast-api",
+    "IP": "127.0.0.1",
     "PORT": 80,
     "USER": "APIUser",
     "PASSWORD": "qduqbwflaou8947",

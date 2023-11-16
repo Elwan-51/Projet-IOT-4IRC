@@ -7,6 +7,7 @@ from sqlalchemy import Column, Float, String, Integer, DateTime, Boolean
 from sqlalchemy.orm import Session
 import hashlib
 from app.dependencies import config
+import random
 
 
 SQLALCHEMY_DATABASE_URL = f'{config["DATABASE"]["DATABASE_TYPE"]}://{config["DATABASE"]["USER"]}:{config["DATABASE"]["PASSWORD"]}@{config["DATABASE"]["URL"]}:{config["DATABASE"]["PORT"]}/{config["DATABASE"]["DATABASE"]}'
@@ -38,6 +39,7 @@ class DBUser(Base):
     login = Column(String(50), unique=True)
     password = Column(String(250))
     disable = Column(Boolean)
+    token = Column(String(250))
 
 
 Base.metadata.create_all(bind=engine)
@@ -65,6 +67,7 @@ class User(BaseModel):
 class UserInDB(User):
     password: str
     id: Optional[int] = None
+    token: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -97,7 +100,7 @@ def create_data(db: Session, value: Value):
 
 def create_user(db: Session, user: UserInDB):
     user.password = hashlib.sha256(user.password.encode()).hexdigest()
-
+    user.token = hashlib.sha256(f'{user.login}{datetime.now()}'.encode()).hexdigest()
     db_user = DBUser(**user.model_dump())
     db.add(db_user)
     db.commit()
@@ -112,3 +115,5 @@ def get_users(db: Session):
 def get_user_name(db: Session, user_name: str):
     return  db.query(DBUser).where(DBUser.login == user_name).first()
 
+def get_user_by_token(db: Session, token: str):
+    return db.query(DBUser).where(DBUser.token == token).first()

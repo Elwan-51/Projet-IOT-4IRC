@@ -23,6 +23,7 @@ async def root():
     r = requests.post(f"{config['SERIAL']['DIST_HOST']}:{config['SERIAL']['PORT']}", data={'foo': 'bar'})
     return {"message": "Doc available at url/docs"}
 
+
 @app.post('/token')
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
     user_db = get_user_name(db, form_data.username)
@@ -32,4 +33,4 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
     hashed_password = hashlib.sha256(form_data.password.encode()).hexdigest()
     if not hashed_password == user_db.password:
         raise HTTPException(status_code=400, detail="Incorect username or Password")
-    return {"access_token": user_db.login, "token_type": "bearer"}
+    return {"access_token": user_db.token, "token_type": "bearer"}

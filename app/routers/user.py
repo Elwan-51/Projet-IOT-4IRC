@@ -1,6 +1,6 @@
 from typing import Annotated
 from app.database import User, Session, List, UserInDB
-from app.database import get_db, create_user, get_users, get_user_name
+from app.database import get_db, create_user, get_users, get_user_name, get_user_by_token
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.dependencies import oauth2_scheme, config
 router = APIRouter(
@@ -33,7 +33,7 @@ def get_user_by_name_view(user_name: str, token: Annotated[str, Depends(oauth2_s
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
-    user = get_user_name(db, token)
+    user = get_user_by_token(db, token)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -60,3 +60,4 @@ async def setup_app_user(db: Session = Depends(get_db)):
 
     db_user = create_user(db, user)
     return db_user
+

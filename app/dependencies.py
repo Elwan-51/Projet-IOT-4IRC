@@ -1,6 +1,7 @@
 from fastapi.security import OAuth2PasswordBearer
 import json
 
+
 with open('/code/config.json', 'r') as config_file:
     config = json.load(config_file)
 
