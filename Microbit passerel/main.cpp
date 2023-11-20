@@ -84,7 +84,7 @@ void onData(MicroBitEvent)
 {
     ManagedString s = uBit.radio.datagram.recv();
     ManagedString s_decrypt = decryption(s);
-    if (s.substring(0,4) == "1857"){
+    if (s_decrypt.substring(0,4) == "1857"){
         uBit.serial.send(s_decrypt);
     }
 }
