@@ -23,6 +23,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
+test
+
 #include <MicroBit.h>
 #include <tsl256x.h>
 #include <ssd1306.h>
