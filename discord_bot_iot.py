@@ -18,7 +18,7 @@ intents.message_content = True
 URL = f"http://{config['API']['URL']}:{config['API']['PORT']}"
 
 # Bot definition
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix=config['DISCORD_BOT']['PREFIX'], intents=intents)
 
 
 # Bot starting event
@@ -45,6 +45,7 @@ async def mytask():
     logging.info("Channel name actualised")
 
 # Command section
+
 
 @bot.command()
 async def temp(ctx):

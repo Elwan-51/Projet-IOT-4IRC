@@ -1,17 +1,15 @@
 import hashlib
-from app.dependencies import config
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 from app.database import get_user_name, Session, get_db
-import requests
 from app.routers import lumi
 from app.routers import temp
 from app.routers import data
 from app.routers import user
 
-app = FastAPI()
-
+app = FastAPI() # Fast API app
+# Importer router
 app.include_router(lumi.router)
 app.include_router(temp.router)
 app.include_router(data.router)
@@ -20,12 +18,12 @@ app.include_router(user.router)
 
 @app.get("/")
 async def root():
-    r = requests.post(f"{config['SERIAL']['DIST_HOST']}:{config['SERIAL']['PORT']}", data={'foo': 'bar'})
     return {"message": "Doc available at url/docs"}
 
 
 @app.post('/token')
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+    # Get token for auth
     user_db = get_user_name(db, form_data.username)
     print(form_data.username)
     if not user_db:

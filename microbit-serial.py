@@ -70,7 +70,7 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
         data_rec: str = self.request[0].strip().decode('utf-8')  # Decode data to format utf-8
         socket = self.request[1]  # Get the socket used for the communication
         current_thread = threading.current_thread()  # Go in a thread to not hinder other traffic
-        loggers["udp_logger"].info(f"{current_thread.name}: client: {self.client_address}, wrote: {data_rec}") # Display message from client
+        loggers["udp_logger"].info(f"{current_thread.name}: client: {self.client_address}, wrote: {data_rec}")  # Display message from client
         if data_rec != "":  # If we Get Data
             if data_rec in MICRO_COMMANDS:  # If value in the list MICRO_COMMANDS
 
@@ -85,7 +85,7 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
                 loggers["udp_logger"].info(x.content)
                 socket.sendto(x.content, self.client_address)  # Send the API value to the client
             else:  # If no match
-                loggers["udp_logger"].warning("Unknown message: ", data_rec)  # print the message in logs
+                loggers["udp_logger"].warning(f"Unknown message: {data_rec}")  # print the message in logs
 
 
 class ThreadedUDPServer(socketserver.ThreadingMixIn, socketserver.UDPServer):
