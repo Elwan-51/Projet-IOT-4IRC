@@ -172,8 +172,12 @@ int main()
 
         // Display temperature and lux data based on the order 
         screen.display_line(0,0,"Donnees : ");
+        screen.display_line(1,0,"                                      ");
+        screen.display_line(2,0,"                                      ");
+
         if (ordre1 == true)
         {
+            
             screen.display_line(1,0,displaytemp2.toCharArray());
             screen.display_line(2,0,displaylux.toCharArray());
         }
