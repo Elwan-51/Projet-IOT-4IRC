@@ -26,6 +26,7 @@ def create_temp_entry(temp: Value, token: Annotated[str, Depends(oauth2_scheme)]
 @router.get('/', response_model=List[ValueInDB])
 def get_all_temp_view(db: Session = Depends(get_db)) -> List[ValueInDB]:
     # Get all temperature
+
     return get_types(db, "temp")
 
 

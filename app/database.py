@@ -20,6 +20,7 @@ Base = declarative_base()
 
 # Define a function to get a database session
 def get_db():
+    # function used to connect to the database
     db = SessionLocal()
     try:
         yield db
@@ -28,6 +29,7 @@ def get_db():
 
 # Define a model for the "value" table in the database
 class DBValue(Base):
+    # Table Value
     __tablename__ = 'value'
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String(10))
@@ -36,6 +38,7 @@ class DBValue(Base):
 
 # Define a model for the "user" table in the database
 class DBUser(Base):
+    # Table User
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, index=True)
     login = Column(String(50), unique=True)
@@ -52,6 +55,7 @@ class Value(BaseModel):
 
 # Define a model for a value in the database
 class ValueInDB(BaseModel):
+
     id: Optional[int] = None
     type: Optional[str] = None
     value: float
@@ -67,9 +71,11 @@ class User(BaseModel):
 
 # Define a model for a user in the database
 class UserInDB(User):
+    # User model in DataBase
     password: str
     id: Optional[int] = None
     token: Optional[str] = None
+
 
     class Config:
         from_attributes = True
@@ -78,22 +84,27 @@ class UserInDB(User):
 
 # Get data by id
 def get_data_id(db: Session, value_id: int):
+    # get the data based on the data id
     return db.query(DBValue).where(DBValue.id == value_id).first()
 
 # Get all data
 def get_data(db: Session):
+    # get all data
     return db.query(DBValue).all()
 
 # Get data of a specific type
 def get_types(db: Session, value_type: str):
+    # get all data of a given type
     return db.query(DBValue).where(DBValue.type == value_type).all()
 
 # Get last data for a specific type
 def get_last_types(db: Session, value_type: str):
     return db.query(DBValue).order_by(DBValue.id.desc()).where(DBValue.type == value_type).first()
 
+
 # Create a new data
 def create_data(db: Session, value: Value):
+    # Create a new data
     db_value = DBValue(**value.model_dump())
     db.add(db_value)
     db.commit()
@@ -102,6 +113,7 @@ def create_data(db: Session, value: Value):
 
 # Create a new user
 def create_user(db: Session, user: UserInDB):
+    # Create a new user
     user.password = hashlib.sha256(user.password.encode()).hexdigest()
     user.token = hashlib.sha256(f'{user.login}{datetime.now()}'.encode()).hexdigest()
     db_user = DBUser(**user.model_dump())
@@ -112,6 +124,7 @@ def create_user(db: Session, user: UserInDB):
 
 # Get all users
 def get_users(db: Session):
+    # get all users
     return db.query(DBUser).all()
 
 # Get a user by name
@@ -121,3 +134,4 @@ def get_user_name(db: Session, user_name: str):
 # Get a user by token
 def get_user_by_token(db: Session, token: str):
     return db.query(DBUser).where(DBUser.token == token).first()
+

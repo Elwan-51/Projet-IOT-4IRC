@@ -11,11 +11,13 @@
 
 The project is composed of 5 core element and an optional one :
 
+
 - **Microbit capteur/** : Is used as a sensor to gather data and send them trough radio frequency
 - **Microbit passerel/** : Is used as an antenna to receive data and send message to the sensor
 - [**microbit-serial.py**](microbit-serial.py) : Is used as a gateway from the Microbit, the computer and the Android App 
 - **App/** : Contain the Python API
 - **appliAndroid/** : Contain the Android App
+
 - [**discord_bot_iot.py**](discord_bot_iot.py) : Is used as a third service tool to set up the database and test the APi
 
 All the project is based on the following schema : 
@@ -73,3 +75,4 @@ It is composed of 3 commands :
 - **lumi** : Is used to display the luminosity data
 - **temp** : Is used to display the temperature data
 - **lasy_data** : Is used to display the last data
+

@@ -26,6 +26,7 @@ def get_all_data_view(db: Session = Depends(get_db)) -> ValueInDB:
 @router.get('/last/', response_model=List[ValueInDB])
 def get_last_datas_view(db: Session = Depends(get_db)) -> List[ValueInDB]:
     # return last luminosity and last temperature
+
     data = [
         get_last_types(db, 'lumi'),
         get_last_types(db, 'temp')
