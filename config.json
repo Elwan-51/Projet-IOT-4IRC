@@ -1,6 +1,7 @@
 {
   "API": {
     "URL": "fast-api",
+    "IP": "127.0.0.1",
     "PORT": 80,
     "USER": "APIUser",
     "PASSWORD": "qduqbwflaou8947",
@@ -23,6 +24,7 @@
     "FILENAME": "values"
   },
   "DISCORD_BOT": {
-    "BOT_TOKEN": "MTE2NjM1NDExODU1NDY4NTQ2MA.GxvvLs.BC21G01DbQwFSKz8tbEwNV-xvWW2PQoVWr97qs"
+    "BOT_TOKEN": "MTE2NjM1NDExODU1NDY4NTQ2MA.GxvvLs.BC21G01DbQwFSKz8tbEwNV-xvWW2PQoVWr97qs",
+    "PREFIX": "/"
   }
 }
