@@ -5,6 +5,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+/**
+ * Class for sending and receiving data over UDP to the server.
+ * This class is created based on the IoT course.
+ */
 public class MyThread extends Thread {
     private MyThreadEventListener listener;
     private String ip;
@@ -34,11 +38,7 @@ public class MyThread extends Thread {
             byte[] data = message.getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length, address, Integer.parseInt(port));
             UDPSocket.send(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
+        
             retour = new byte[1024];
             DatagramPacket packet = new DatagramPacket(retour,retour.length);
             UDPSocket.receive(packet); //bloquant
