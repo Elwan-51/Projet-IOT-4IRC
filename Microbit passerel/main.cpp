@@ -101,6 +101,7 @@ int main()
 
         if (data_read_serial == "1857:TL"){
             ManagedString s2 ="1857:TL\n";
+
             ManagedString s2_encr = encryption(s2);
             // Create a packet to send encrypted data
             PacketBuffer packet(s2_encr.length());
