@@ -101,7 +101,6 @@ void onData(MicroBitEvent)
     // Receive and decrypt
     
     ManagedString s = uBit.radio.datagram.recv();
-    uBit.display.scroll(s);
     ManagedString s_decrypt = decryption(s);
 
     // Check if the decrypted data starts with "1857"
