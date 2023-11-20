@@ -152,7 +152,7 @@ int main()
         uBit.display.clear();
 
         // Read temperature, humidity, and pressure
-        bme.sensor_read(&pressure, &temp, &humidite);                        // Compensate temperature and format it for display
+        bme.sensor_read(&pressure, &temp, &humidite);                        
         
         // Compensate temperature and format it for display
         int tmp = bme.compensate_temperature(temp);
