@@ -9,9 +9,9 @@ import logging
 
 
 loggers = {
-    "udp_logger": logging.getLogger("Mbit_UDP_Server"),
-    "uart_logger": logging.getLogger("Mbit_UART_Server"),
-    "glob_logger": logging.getLogger("Mbit_Global_Logger")
+    "Mbit_UDP_Server": logging.getLogger("Mbit_UDP_Server"),
+    "Mbit_UART_Server": logging.getLogger("Mbit_UART_Server"),
+    "Mbit_Global_Logger": logging.getLogger("Mbit_Global_Logger")
 }
 
 # Create handler
@@ -28,14 +28,15 @@ f_handler.setFormatter(f_format)
 
 for logger in loggers.values():
     # Add handler to logger
-
-    logger.addHandler(c_handler)
-    logger.addHandler(f_handler)
+    loggers[logger.name].addHandler(c_handler)
+    loggers[logger.name].addHandler(f_handler)
+    # Set logger level
+    loggers[logger.name].setLevel(logging.INFO)
 
 
 with open('config.json', 'r') as conf_file:
     config = json.load(conf_file)
-    loggers["glob_logger"].info("Config Loaded")
+    loggers["Mbit_Global_Logger"].info("Config Loaded")
 
 # Config section
 HOST: str = config['SERIAL']['HOST']  # Host IP used for the gateway server Type
@@ -53,7 +54,7 @@ headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 data = {'username': API_USER, 'password': API_PASSWORD}
 response = requests.post(f"http://{API_URL}/token", headers=headers, data=data)
 if response.status_code != 200:
-    loggers["glob_logger"].error("Failed to authenticated in the API")
+    loggers["Mbit_Global_Logger"].error("Failed to authenticated in the API")
     exit(-1)
 # Header used to set the context for API request
 
@@ -70,7 +71,7 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
         data_rec: str = self.request[0].strip().decode('utf-8')  # Decode data to format utf-8
         socket = self.request[1]  # Get the socket used for the communication
         current_thread = threading.current_thread()  # Go in a thread to not hinder other traffic
-        loggers["udp_logger"].info(f"{current_thread.name}: client: {self.client_address}, wrote: {data_rec}")  # Display message from client
+        loggers["Mbit_UDP_Server"].info(f"{current_thread.name}: client: {self.client_address}, wrote: {data_rec}")  # Display message from client
         if data_rec != "":  # If we Get Data
             if data_rec in MICRO_COMMANDS:  # If value in the list MICRO_COMMANDS
 
@@ -78,15 +79,14 @@ class ThreadedUDPRequestHandler(socketserver.BaseRequestHandler):
 
                 sendUARTMessage(f'{APPID}:{data_rec}'.encode())  # Send the received message and add the APP ID via UART
                 socket.sendto('{"message": "Success"}'.encode(), self.client_address)  # Send the success to client
-
+                loggers["Mbit_UDP_Server"].info(f"Message <{data_rec}> sent to micro-controller.")
             elif data_rec == "getValues()":  # If getValues()
 
                 x = requests.get(f'http://{API_URL}/data/last/')  # Get the last value through the API
-                loggers["udp_logger"].info(x.content)
+                loggers["Mbit_UDP_Server"].info(x.content)
                 socket.sendto(x.content, self.client_address)  # Send the API value to the client
             else:  # If no match
-                loggers["udp_logger"].warning(f"Unknown message: {data_rec}")  # print the message in logs
-
+                loggers["Mbit_UDP_Server"].warning(f"Unknown message: {data_rec}")  # print the message in logs
 
 class ThreadedUDPServer(socketserver.ThreadingMixIn, socketserver.UDPServer):
     pass
@@ -112,25 +112,23 @@ def initUART() -> None:
     ser.xonxoff = False  # disable software flow control
     ser.rtscts = False  # disable hardware (RTS/CTS) flow control
     ser.dsrdtr = False  # disable hardware (DSR/DTR) flow control
-    loggers["uart_logger"].info('Starting Up Serial Monitor')
-
+    loggers["Mbit_UART_Server"].info('Starting Up Serial Monitor')
     try:
         ser.open()
     except serial.SerialException:
-        loggers["uart_logger"].error(f'Serial {SERIALPORT} port not available"')
+        loggers["Mbit_UART_Server"].error(f'Serial {SERIALPORT} port not available"')
         exit(-2)
 
 
 def sendUARTMessage(msg) -> None:
     ser.write(msg)  # Write msg in the serial communication
-    loggers["uart_logger"].info("Message <" + msg.decode('utf-8') + "> sent to micro-controller.")
-
+    loggers["Mbit_UART_Server"].info("Message <" + msg.decode('utf-8') + "> sent to micro-controller.")
 
 # Main program logic follows:
 if __name__ == '__main__':
     initUART()
     f = open(FILENAME, "ab")  # Open the file in Append Binary mods
-    loggers["glob_logger"].info(f'{FILENAME} open successfully')
+    loggers["Mbit_Global_Logger"].info(f'{FILENAME} open successfully')
     print('Press Ctrl-C to quit.')
 
     # Initialise the UDP server
@@ -142,28 +140,27 @@ if __name__ == '__main__':
     try:
 
         server_thread.start()  # Start the UDP server
-        loggers["udp_logger"].info(f"Server started at {HOST} port {UDP_PORT}")
-
+        loggers["Mbit_UDP_Server"].info(f"Server started at {HOST} port {UDP_PORT}")
         while ser.isOpen():  # Open serial communication
 
-                data_str = ser.read(20)  # Read 20 bytes
+                data_str = ser.read(16)  # Read 16  bytes
                 f.write(data_str)  # Write data int the files
-                loggers["uart_logger"].info(str(data_str) + ' received')
+                loggers["Mbit_UART_Server"].info(str(data_str) + ' received')
                 data = str(data_str).split('\\n')[0].split("b'")[1]  # Get the data from the uart
                 if str(APPID) in data:  # If APP ID is present at the start of the message
                     data_send = {}
                     if "Temp" in data:  # If the Data type is Temp
-                        # Format the dictionary to math tha API requirement
+                       # Format the dictionary to math tha API requirement
                         data_send = {"value": float(data.split(':')[-1])}
                         payload = json.dumps(data_send)  # Convert to JSON
-                        # Send the data to the API
+                       # Send the data to the API
                         response = requests.request("POST", f'http://{API_URL}/temp/', headers=headers, data=payload)
                     if "Lux" in data:  # If the Data type is Lumi
-                        # Format the dictionary to math tha API requirement
+                       # Format the dictionary to math tha API requirement
                         data_send = {"value": float(data.split(':')[-1])}
                         # Convert to JSON
                         payload = json.dumps(data_send)
-                        # Send the data to the API
+                       # Send the data to the API
                         response = requests.request("POST", f'http://{API_URL}/lumi/', headers=headers, data=payload)
     except (KeyboardInterrupt, SystemExit):
         # If there is an exception or a key interruption
@@ -172,4 +169,4 @@ if __name__ == '__main__':
         server.server_close()
         f.close()
         ser.close()
-        loggers["uart_logger"].error("UART not started")
+        loggers["Mbit_UART_Server"].error("UART not started")

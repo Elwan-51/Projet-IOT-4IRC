@@ -99,17 +99,18 @@ bool ordre1;
 void onData(MicroBitEvent)
 {
     // Receive and decrypt
+    
     ManagedString s = uBit.radio.datagram.recv();
     ManagedString s_decrypt = decryption(s);
 
     // Check if the decrypted data starts with "1857"
     if (s_decrypt.substring(0,4) == "1857"){
         // Check the order
-        if (s_decrypt.substring(5,2)== "tl")
+        if (s_decrypt.substring(5,2)== "TL")
         {
             ordre1 = true;
         }
-        else if (s_decrypt.substring(5,2)=="lt")
+        else if (s_decrypt.substring(5,2)=="LT")
         {
             ordre1 = false;
         }
@@ -156,7 +157,7 @@ int main()
         
         // Compensate temperature and format it for display
         int tmp = bme.compensate_temperature(temp);
-        ManagedString temperature = ManagedString(tmp/100) + "." + (tmp > 0 ? ManagedString(tmp%100): ManagedString((-tmp)%100))+" ";
+        ManagedString temperature = ManagedString(tmp/100) + "." + (tmp > 0 ? ManagedString(tmp%100): ManagedString((-tmp)%100));
         ManagedString displaytemp = "Temp:" + temperature;
         ManagedString displaytemp2 = "Temp:" + temperature +"C";
         
@@ -171,8 +172,12 @@ int main()
 
         // Display temperature and lux data based on the order 
         screen.display_line(0,0,"Donnees : ");
+        screen.display_line(1,0,"                                      ");
+        screen.display_line(2,0,"                                      ");
+
         if (ordre1 == true)
         {
+            
             screen.display_line(1,0,displaytemp2.toCharArray());
             screen.display_line(2,0,displaylux.toCharArray());
         }
@@ -187,14 +192,14 @@ int main()
         uBit.sleep(5);
 
         // Encrypt and send temperature data over the radio
-        ManagedString s2 = "1857:"+displaytemp+"\n";
+        ManagedString s2 = "1857:"+displaytemp+"\n        ";
         ManagedString s2_encode =encryption(s2);
         memcpy(packet.getBytes(),s2_encode.toCharArray(),20);
         uBit.radio.datagram.send(packet);
         uBit.sleep(5);
 
         // Encrypt and send lux data over the radio
-        ManagedString s3 = "1857:"+displaylux+"\n";
+        ManagedString s3 = "1857:"+displaylux+"\n          ";
         ManagedString s3_encode =encryption(s3);
         memcpy(packet.getBytes(),s3_encode.toCharArray(),20);
         uBit.radio.datagram.send(packet);
