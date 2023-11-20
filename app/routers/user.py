@@ -27,6 +27,12 @@ def register_user_view(user: UserInDB, db: Session = Depends(get_db)) -> UserInD
     return db_user
 
 
+@router.post('/register/', response_model=UserInDB)
+def register_user_view(user: UserInDB, db: Session = Depends(get_db)):
+    db_user = create_user(db, user)
+    return db_user
+
+
 @router.get('/', response_model=List[User])
 def get_all_user_view(token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)) -> List[User]:
     # list all user
@@ -70,4 +76,3 @@ async def setup_app_user(db: Session = Depends(get_db)) -> User:
     user = UserInDB(login=config['API']['USER'], password=config['API']['PASSWORD'])
     db_user = create_user(db, user)
     return db_user
-

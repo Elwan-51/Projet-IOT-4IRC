@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 import hashlib
 from app.dependencies import config
 
+
 # Core element for the database
 SQLALCHEMY_DATABASE_URL = f'{config["DATABASE"]["DATABASE_TYPE"]}://{config["DATABASE"]["USER"]}:{config["DATABASE"]["PASSWORD"]}@{config["DATABASE"]["URL"]}:{config["DATABASE"]["PORT"]}/{config["DATABASE"]["DATABASE"]}'
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, future=True)
@@ -50,11 +51,13 @@ Base.metadata.create_all(bind=engine)
 
 class Value(BaseModel):
     # Base Model for new Value
+
     value: float
 
 
 class ValueInDB(BaseModel):
     # Value in model in DataBase
+
     id: Optional[int] = None
     type: Optional[str] = None
     value: float
@@ -66,6 +69,7 @@ class ValueInDB(BaseModel):
 
 class User(BaseModel):
     # Base model in User
+
     login: str
     disable: Optional[bool] = False
 
@@ -75,6 +79,7 @@ class UserInDB(User):
     password: str
     id: Optional[int] = None
     token: Optional[str] = None
+
 
     class Config:
         from_attributes = True

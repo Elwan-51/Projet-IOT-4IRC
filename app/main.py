@@ -1,4 +1,5 @@
 import hashlib
+
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
@@ -7,6 +8,7 @@ from app.routers import lumi
 from app.routers import temp
 from app.routers import data
 from app.routers import user
+
 
 app = FastAPI() # Fast API app
 # Importer router

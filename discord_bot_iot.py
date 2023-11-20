@@ -16,6 +16,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 URL = f"http://{config['API']['URL']}:{config['API']['PORT']}"
+bot = commands.Bot(command_prefix='$', intents=intents)
 
 # Bot definition
 bot = commands.Bot(command_prefix=config['DISCORD_BOT']['PREFIX'], intents=intents)
@@ -45,7 +46,6 @@ async def mytask():
     logging.info("Channel name actualised")
 
 # Command section
-
 
 @bot.command()
 async def temp(ctx):
