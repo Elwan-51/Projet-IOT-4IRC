@@ -1,5 +1,4 @@
 import hashlib
-
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
@@ -29,8 +28,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: 
     user_db = get_user_name(db, form_data.username)
     print(form_data.username)
     if not user_db:
-        raise HTTPException(status_code=400, detail="Incorect username or Password")
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
     hashed_password = hashlib.sha256(form_data.password.encode()).hexdigest()
     if not hashed_password == user_db.password:
-        raise HTTPException(status_code=400, detail="Incorect username or Password")
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+
     return {"access_token": user_db.token, "token_type": "bearer"}

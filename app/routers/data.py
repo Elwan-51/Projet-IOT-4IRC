@@ -1,7 +1,6 @@
 # Router for global data manipulation
 from app.database import get_db, get_data_id, get_data, get_last_types
 from app.database import List, Session, ValueInDB
-
 from fastapi import APIRouter, Depends
 
 # Router configuration

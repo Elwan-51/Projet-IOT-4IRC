@@ -17,7 +17,6 @@ router = APIRouter(
 def create_temp_entry(temp: Value, token: Annotated[str, Depends(oauth2_scheme)],
                       db: Session = Depends(get_db)) -> Value:
     # Create new temperature, require auth
-
     temp = ValueInDB(**temp.dict())
     temp.type = "temp"
     db_value = create_data(db, temp)

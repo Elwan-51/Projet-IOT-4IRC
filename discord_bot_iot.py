@@ -21,6 +21,9 @@ bot = commands.Bot(command_prefix='$', intents=intents)
 # Bot definition
 bot = commands.Bot(command_prefix=config['DISCORD_BOT']['PREFIX'], intents=intents)
 
+# Bot definition
+bot = commands.Bot(command_prefix=config['DISCORD_BOT']['PREFIX'], intents=intents)
+
 
 # Bot starting event
 @bot.event
@@ -46,6 +49,7 @@ async def mytask():
     logging.info("Channel name actualised")
 
 # Command section
+
 
 @bot.command()
 async def temp(ctx):
@@ -85,6 +89,7 @@ async def setupapp(ctx):
     # Command that register the first user used by the gateway to register data
     x = requests.get(f'{URL}/user/app/')
     await ctx.channel.send(x.content.decode())
+
 
 # Bot startup
 bot.run(config['DISCORD_BOT']['BOT_TOKEN'])
