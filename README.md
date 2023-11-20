@@ -11,7 +11,7 @@
 
 ## Project presentation
 
-Our business wants us to develop box with a connected object with temperature and light sensor. Our goal is to print those information in every office that has one of these boxes. 
+Our business wants us to develop boxes with temperature and light sensor. Our goal is to print those information in every office that has one of these boxes. 
 Moreover, people can access data through an Android data (sorry iPhone user :/) that is directly connected to a server. 
 
 Here, we had to configure the object collecting data, server, android app and also the antenna.
@@ -94,5 +94,5 @@ It is composed of 3 commands :
 - **setupapp** : Is used to set up the gateway account
 - **lumi** : Is used to display the luminosity data
 - **temp** : Is used to display the temperature data
-- **lasy_data** : Is used to display the last data
+- **last_data** : Is used to display the last data
 
